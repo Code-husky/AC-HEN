@@ -42,7 +42,7 @@ exist_col=[]
 exist_col=np.delete(all_col,drop_col)
 graph=torch.tensor(graph,dtype=torch.float)
 TrainFeature=torch.tensor(TrainFeature,dtype=torch.float)
-all_feature=np.load("data/Source_feature_low.npy")
+all_feature=np.load("data/target_feature_low.npy")
 #get  batch generator
 batch_iterator=batch_generator(new_context_pair,batch_node_num,missingidx,context_node_num,TrainFeature,cos_matrix,missingFeature)
 missingFeature=torch.tensor(missingFeature,dtype=torch.float)

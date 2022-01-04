@@ -11,9 +11,9 @@ def loaddata():
     TrainMatrix = np.load('data/TrainDropMatrix.npy')
     missingFeature = np.load("data/TrainMissingMovieFea.npy")
     missingidx = np.load("data/TrainDropMissingidx.npy")
-    completeFeature = np.load("data/missing_feature_low.npy")
+    completeFeature = np.load("data/Compelte_feature_low.npy")
     completeidx = np.load("data/TrainCompleteidx.npy")
-    sourceFeature = np.load("data/Source_feature_low.npy")
+    sourceFeature = np.load("data/target_feature_low.npy")
 
 
     try:
@@ -30,8 +30,8 @@ def loadvaldata():
     missingFeature = np.load("data/valid/ValidMissingFeature.npy")
     missingidx = np.load("data/valid/ValidDropMissingidx.npy")
     completeidx = np.load("data/valid/ValidDropCompelteidx.npy")
-    completeFeature = np.load("data/missing_feature_low.npy")
-    sourceFeature = np.load("data/Source_feature_low.npy")
+    completeFeature = np.load("data/Compelte_feature_low.npy")
+    sourceFeature = np.load("data/target_feature_low.npy")
 
 
     return TrainMatrix,np.vstack((missingFeature,completeFeature)),\
@@ -44,8 +44,8 @@ def loadtestdata():
     missingFeature = np.load("data/test/TestMissingMissingFea.npy")
     missingidx = np.load("data/test/TestDropmissingidx.npy")
     completeidx = np.load("data/test/TestDropCompleteidx.npy")
-    completeFeature = np.load("data/missing_feature_low.npy")
-    sourceFeature = np.load("data/Source_feature_low.npy")
+    completeFeature = np.load("data/Compelte_feature_low.npy")
+    sourceFeature = np.load("data/target_feature_low.npy")
 
 
 
