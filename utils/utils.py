@@ -7,13 +7,13 @@ from math import sqrt
 import itertools
 
 def loaddata():
-    graph = nx.read_gpickle("data/IMDB_movie_actor_matrix.pkl")
-    TrainMatrix = np.load('data/TrainDropMovieActorMatrix.npy')
-    missingFeature = np.load("data/TrainMissingMovieEmb.npy")
-    missingidx = np.load("data/TrainDropMovieidx.npy")
-    completeFeature = np.load("data/actor_feature_low.npy")
-    completeidx = np.load("data/TrainDropActoridx.npy")
-    sourceFeature = np.load("data/movie_feature_low.npy")
+    graph = nx.read_gpickle("data/IMDB_matrix.pkl")
+    TrainMatrix = np.load('data/TrainDropMatrix.npy')
+    missingFeature = np.load("data/TrainMissingMovieFea.npy")
+    missingidx = np.load("data/TrainDropMissingidx.npy")
+    completeFeature = np.load("data/missing_feature_low.npy")
+    completeidx = np.load("data/TrainCompleteidx.npy")
+    sourceFeature = np.load("data/Source_feature_low.npy")
 
 
     try:
@@ -26,12 +26,12 @@ def loaddata():
            missingidx,context_pair,sourceFeature[missingidx],missingFeature
 
 def loadvaldata():
-    TrainMatrix = np.load('data/valid/ValidDropMovieActorMatrix.npy')
-    missingFeature = np.load("data/valid/ValidMissingMovieEmb.npy")
-    missingidx = np.load("data/valid/ValidDropMovieidx.npy")
-    completeidx = np.load("data/valid/ValidDropActoridx.npy")
-    completeFeature = np.load("data/actor_feature_low.npy")
-    sourceFeature = np.load("data/movie_feature_low.npy")
+    TrainMatrix = np.load('data/valid/ValidMatrix.npy')
+    missingFeature = np.load("data/valid/ValidMissingFeature.npy")
+    missingidx = np.load("data/valid/ValidDropMissingidx.npy")
+    completeidx = np.load("data/valid/ValidDropCompelteidx.npy")
+    completeFeature = np.load("data/missing_feature_low.npy")
+    sourceFeature = np.load("data/Source_feature_low.npy")
 
 
     return TrainMatrix,np.vstack((missingFeature,completeFeature)),\
@@ -40,12 +40,12 @@ def loadvaldata():
 
 
 def loadtestdata():
-    TrainMatrix = np.load('data/test/TestDropMovieActorMatrix.npy')
-    missingFeature = np.load("data/test/TestMissingMovieEmb.npy")
-    missingidx = np.load("data/test/TestDropMovieidx.npy")
-    completeidx = np.load("data/test/TestDropActoridx.npy")
-    completeFeature = np.load("data/actor_feature_low.npy")
-    sourceFeature = np.load("data/movie_feature_low.npy")
+    TrainMatrix = np.load('data/test/TestMatrix.npy')
+    missingFeature = np.load("data/test/TestMissingMissingFea.npy")
+    missingidx = np.load("data/test/TestDropmissingidx.npy")
+    completeidx = np.load("data/test/TestDropCompleteidx.npy")
+    completeFeature = np.load("data/missing_feature_low.npy")
+    sourceFeature = np.load("data/Source_feature_low.npy")
 
 
 
@@ -96,7 +96,7 @@ def run_random_walks_n2v(graph, nodes, num_walks=4, walk_len=20):
 
 def get_batch_rdnode(context_pair,batch_size,start_index,usedropidx):
     '''
-    drop nodes
+    将去除前后文节点
     '''
     batch_node_idx = usedropidx[start_index:start_index+batch_size]
     result = []
@@ -111,14 +111,14 @@ def get_batch_rdnode(context_pair,batch_size,start_index,usedropidx):
 
 def get_context_node(context_node,missingidx,len,source_node):
     '''
-    get high order nodes
+    去除前后文节点中没有特征的节点
     '''
     count=0
     node_index=0
     temp=[source_node]
     while count<len:
         flag=True
-        for i in missingidx:
+        for i in missingidx:#节点没有特征
             try:
                 if i==context_node[node_index]:
                     flag=False
@@ -126,7 +126,7 @@ def get_context_node(context_node,missingidx,len,source_node):
                 node_index=node_index-1
                 temp.append(context_node[node_index])
 
-        if flag:
+        if flag:#加入有特征的节点
             temp.append(context_node[node_index])
             count=count+1
         node_index=node_index+1
@@ -136,7 +136,7 @@ def get_context_node(context_node,missingidx,len,source_node):
 def get_batch_feature( batch_node_num, context_node_num, feature_dim,
                        allFeature, batch_rdnode):
     '''
-    get feature
+    获取特征
     '''
     batch_feature = np.zeros((batch_node_num, context_node_num, feature_dim))
     for i in range(0, len(batch_feature)):
@@ -148,7 +148,7 @@ def get_batch_feature( batch_node_num, context_node_num, feature_dim,
 
 def get_CosSimilarity(missingFeature,miss_idx,k,name):
     '''
-    select top-k similar nodes
+    选取top k cos 相似度
     '''
     try:
         final_matrix=np.load(name+'_Cos_Similarty_Matrix.npy')
@@ -163,12 +163,12 @@ def get_CosSimilarity(missingFeature,miss_idx,k,name):
         exist_col,drop_col=get_dropcol(missingFeature[miss_idx[0]])
         feature=missingFeature[:,exist_col]
 
-
+        '只计算一般矩阵，另一半使用对称来获得'
         for i in range(0,drop_len):
             for j in range(0,exist_len):
                 cos_Simi_matrix[i][j]=similarity(feature[miss_idx[i]],feature[exist_idx[j]])
             if i%10==0:
-                print('process: {}'.format(i/drop_len))
+                print('当前进度{}'.format(i/drop_len))
 
 
 
@@ -187,7 +187,7 @@ def get_CosSimilarity(missingFeature,miss_idx,k,name):
 
 def get_dropcol(missingFeature):
     '''
-    select exist feature drop feature
+    选取特征存在的维度
     '''
     exist_col=[]
     drop_col=[]
