@@ -18,5 +18,13 @@ Recent versions of the following packages for Python 3 are required:
 ## Datasets
 The raw datasets are available at:
 * IMDB https://github.com/cynricfu/MAGNN/tree/master/data/raw/IMDB
-* DBLP https://github.com/cynricfu/MAGNN/tree/master/data/raw/DBLP
-The precessed data are avaliable in this project in the file 
+* DBLP https://github.com/cynricfu/MAGNN/tree/master/data/raw/DBLP  
+
+The precessed data are avaliable in this project in the file DBLPdata , ACMdata and data.
+
+## Run Code
+The default dataset used in this project is IMDB.  
+`python main.py`
+
+If you want to change the default configuration, you can edit `loaddata` in `utils.py`. 
+
