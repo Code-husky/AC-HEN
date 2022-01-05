@@ -24,7 +24,10 @@ The precessed data are avaliable in this project in the file DBLPdata , ACMdata 
 
 ## Run Code
 The default dataset used in this project is IMDB.  
+
+Input this command in command line and run the code.  
+
 `python main.py`
 
-If you want to change the default configuration, you can edit `loaddata` in `utils.py`. 
+If you want to change the default configuration, you can edit `loaddata` in `utils.py` . For example, if you want to change dataset, you can use the data of 'IMDBdata' and 'ACMdata'.
 
