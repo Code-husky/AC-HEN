@@ -19,7 +19,8 @@ Recent versions of the following packages for Python 3 are required:
 The raw datasets are available at:
 * IMDB https://www.dropbox.com/s/g0btk9ctr1es39x/IMDB_processed.zip?dl=0
 * DBLP https://www.dropbox.com/s/yh4grpeks87ugr2/DBLP_processed.zip?dl=0 
-* ACM  https://pan.baidu.com/s/1w5rYW89OJl-rwuNgVftWMg password:pqw6
+* ACM  https://pan.baidu.com/s/1w5rYW89OJl-rwuNgVftWMg password:pqw6  
+
 The precessed data are avaliable in this project in the file DBLPdata and ACMdata. The `data` file contains the process data of IMDB.
 
 ## Run Code
@@ -31,3 +32,5 @@ Input this command in command line and run the code.
 
 If you want to change the default configuration, you can edit `loaddata` in `utils.py` . For example, if you want to change dataset, you can use the data of 'IMDBdata' and 'ACMdata'.
 
+### Recommended parameter settings
+`hid_dim=256`, `batch_node_num=16`, `context_node_num=4`, `lr = 0.001`, `top_k=4`, `num_heads=8`
