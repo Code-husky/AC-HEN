@@ -11,7 +11,7 @@ class GCN (nn.Module):
         rowsum = torch.sum(adj, 1)
         for i in range(0, len(adj)):
             adj[i] = adj[i] / rowsum[i]
-        out = torch.relu(torch.mm(torch.mm(adj, X), self.W))
+        out = torch.mm(torch.mm(adj, X), self.W)
         return out
 
 
